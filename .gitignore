@@ -1,0 +1,7 @@
+target/
+.idea/
+.vscode/
+*.class
+*.log
+
+config/database.properties
