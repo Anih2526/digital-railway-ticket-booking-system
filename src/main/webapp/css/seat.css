@@ -1,0 +1,124 @@
+* {
+    box-sizing: border-box;
+}
+
+.seat-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 20px 0;
+    color: #4f5d70;
+}
+
+.seat-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.legend {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    display: inline-block;
+    border: 1px solid #bdc7d4;
+}
+
+.legend.available {
+    background: white;
+}
+
+.legend.selected {
+    background: #1769c2;
+    border-color: #1769c2;
+}
+
+.legend.booked {
+    background: #d2d7df;
+}
+
+.coach-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.coach-card {
+    border: 1px solid #dce3ec;
+    border-radius: 12px;
+    padding: 18px;
+    background: #fbfcfe;
+}
+
+.coach-title {
+    margin: 0 0 15px;
+    font-size: 19px;
+}
+
+.seat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.seat-button {
+    min-height: 52px;
+    border: 1px solid #b9c2cf;
+    border-radius: 9px;
+    background: white;
+    color: #172033;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.seat-button:hover:not(:disabled) {
+    border-color: #1769c2;
+}
+
+.seat-button.selected {
+    background: #1769c2;
+    color: white;
+    border-color: #1769c2;
+}
+
+.seat-button.booked {
+    background: #d2d7df;
+    color: #697486;
+    cursor: not-allowed;
+}
+
+.booking-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 20px;
+    margin-top: 24px;
+    padding: 18px;
+    border-radius: 10px;
+    background: #f1f5fa;
+}
+
+.booking-summary span,
+.booking-summary strong {
+    display: block;
+}
+
+.booking-summary span {
+    color: #697486;
+    font-size: 13px;
+}
+
+.full-button {
+    width: 100%;
+    margin-top: 15px;
+}
+
+@media (max-width: 760px) {
+    .coach-container {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-summary {
+        grid-template-columns: 1fr;
+    }
+}

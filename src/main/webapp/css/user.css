@@ -1,0 +1,863 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f6fb;
+    color: #172033;
+    line-height: 1.6;
+}
+
+a {
+    color: inherit;
+}
+
+.top-header {
+    width: 100%;
+    background: #163d67;
+    color: white;
+}
+
+.header-content {
+    width: min(1200px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 22px 0;
+}
+
+.header-content h1 {
+    margin: 0;
+    font-size: 34px;
+}
+
+.header-content p {
+    margin: 2px 0 0;
+    font-size: 16px;
+    opacity: 0.92;
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.header-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 18px;
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.header-link:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.page-container {
+    width: min(1050px, calc(100% - 32px));
+    margin: 38px auto;
+}
+
+.home-container {
+    margin-top: 80px;
+}
+
+.content-card {
+    background: white;
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.home-card {
+    text-align: center;
+}
+
+.content-card h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.intro-text {
+    color: #5d6878;
+    font-size: 17px;
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.home-card .button-group {
+    justify-content: center;
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 22px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.button:hover {
+    opacity: 0.92;
+}
+
+.primary-button {
+    background: #1769c2;
+    color: white;
+}
+
+.secondary-button {
+    background: #5a6473;
+    color: white;
+}
+
+.error-message,
+.success-message {
+    margin: 16px 0;
+    padding: 13px 15px;
+    border-radius: 8px;
+}
+
+.error-message {
+    background: #fff1f0;
+    border: 1px solid #f0c4c1;
+    color: #9b1c16;
+}
+
+.success-message {
+    background: #edf8f0;
+    border: 1px solid #bfe2c6;
+    color: #1d6f32;
+}
+
+/* Search form */
+
+.search-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) minmax(170px, 0.8fr) auto;
+    align-items: end;
+    gap: 14px;
+    margin-top: 25px;
+}
+
+.search-field {
+    min-width: 0;
+}
+
+.search-field label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 600;
+}
+
+.search-field input,
+.admin-form input,
+.admin-form select,
+.inline-form input,
+.inline-form select {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 13px;
+    border: 1px solid #c7cfdb;
+    border-radius: 8px;
+    background: white;
+    color: #172033;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-field input:focus,
+.admin-form input:focus,
+.admin-form select:focus {
+    border-color: #1769c2;
+}
+
+.swap-button {
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #e7eef7;
+    color: #163d67;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.swap-button:hover {
+    background: #d9e5f3;
+}
+
+.search-button {
+    white-space: nowrap;
+}
+
+#searchMessage,
+#seatMessage {
+    margin-top: 18px;
+}
+
+/* Train results */
+
+#trainResults {
+    margin-top: 20px;
+    display: grid;
+    gap: 14px;
+}
+
+.train-card {
+    border: 1px solid #dde4ec;
+    border-radius: 12px;
+    padding: 20px;
+    background: #fbfcfe;
+}
+
+.train-card h3 {
+    margin: 0 0 8px;
+}
+
+.train-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 14px 0;
+}
+
+.info-box {
+    padding: 12px;
+    border-radius: 8px;
+    background: #f0f4f9;
+}
+
+.info-box span {
+    display: block;
+    color: #697486;
+    font-size: 13px;
+}
+
+.info-box strong {
+    display: block;
+    margin-top: 3px;
+}
+
+/* Dashboard */
+
+.profile-box {
+    margin-top: 20px;
+    padding: 16px;
+    background: #f6f8fb;
+    border-radius: 10px;
+}
+
+.profile-box span {
+    display: block;
+    color: #687485;
+    font-size: 13px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.dashboard-card {
+    padding: 22px;
+    border: 1px solid #dce3ec;
+    border-radius: 12px;
+    text-decoration: none;
+    background: #fbfcfe;
+}
+
+.dashboard-card:hover {
+    border-color: #1769c2;
+}
+
+.dashboard-card h3 {
+    margin-top: 0;
+}
+
+.dashboard-card p {
+    margin-bottom: 0;
+    color: #687485;
+}
+
+/* Ticket confirmation */
+
+.success-heading {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.success-mark {
+    flex: 0 0 58px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #1769c2;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.ticket-details {
+    margin-top: 24px;
+    border: 1px solid #dce3ec;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.ticket-details h3 {
+    margin: 0;
+    padding: 16px 18px;
+    background: #163d67;
+    color: white;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #e7ebf0;
+}
+
+.detail-row:last-child {
+    border-bottom: 0;
+}
+
+.detail-row span {
+    color: #697486;
+}
+
+.detail-row strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+/* Booking history */
+
+.history-list {
+    display: grid;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.history-card {
+    border: 1px solid #dce3ec;
+    border-radius: 12px;
+    padding: 20px;
+    background: #fbfcfe;
+}
+
+.history-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.history-top strong,
+.small-label {
+    display: block;
+}
+
+.small-label {
+    color: #697486;
+    font-size: 13px;
+}
+
+.status-badge {
+    padding: 7px 10px;
+    background: #edf8f0;
+    color: #1d6f32;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.history-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.history-grid span {
+    display: block;
+    color: #697486;
+    font-size: 13px;
+}
+
+.history-grid strong {
+    display: block;
+    margin-top: 3px;
+}
+
+.empty-state {
+    margin-top: 20px;
+    padding: 30px;
+    text-align: center;
+    border: 1px dashed #c8d0da;
+    border-radius: 12px;
+}
+
+/* Phone */
+
+@media (max-width: 760px) {
+
+    .header-content {
+        width: calc(100% - 20px);
+        padding: 18px 0;
+    }
+
+    .header-content h1 {
+        font-size: 28px;
+    }
+
+    .header-row {
+        align-items: flex-start;
+    }
+
+    .page-container {
+        width: calc(100% - 20px);
+        margin: 24px auto;
+    }
+
+    .home-container {
+        margin-top: 28px;
+    }
+
+    .content-card {
+        padding: 22px;
+    }
+
+    .content-card h2 {
+        font-size: 24px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .button {
+        width: 100%;
+    }
+
+    .search-form {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .swap-button {
+        align-self: center;
+    }
+
+    .train-info-grid,
+    .dashboard-grid,
+    .history-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .success-heading {
+        align-items: flex-start;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .detail-row strong {
+        text-align: left;
+    }
+
+    .history-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+/* Where-is-my-train style search results - train only */
+.search-panel {
+    overflow: hidden;
+}
+
+.date-strip {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(62px, 1fr));
+    gap: 6px;
+    margin-top: 24px;
+    padding: 8px;
+    border-top: 1px solid #e6eaf0;
+    border-bottom: 1px solid #e6eaf0;
+    overflow-x: auto;
+}
+
+.date-item {
+    min-width: 62px;
+    padding: 8px 4px;
+    border: 0;
+    border-radius: 12px;
+    background: white;
+    color: #172033;
+    cursor: pointer;
+    text-align: center;
+}
+
+.date-item:hover {
+    background: #f1f5fa;
+}
+
+.date-item:disabled {
+    color: #b8c0cb;
+    background: #f8fafc;
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.date-item.selected-date {
+    background: #eaf2fc;
+    box-shadow: inset 0 -3px 0 #1769c2;
+}
+
+.date-day-name,
+.date-month {
+    display: block;
+    font-size: 12px;
+    color: #697486;
+}
+
+.date-item strong {
+    display: block;
+    margin: 4px 0;
+    font-size: 20px;
+}
+
+.results-toolbar {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.results-toolbar h3 {
+    margin: 0;
+}
+
+.toolbar-note {
+    margin: 3px 0 0;
+    color: #697486;
+    font-size: 14px;
+}
+
+.sort-box {
+    min-width: 180px;
+}
+
+.sort-box label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.sort-box select {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 12px;
+    border: 1px solid #c7cfdb;
+    border-radius: 8px;
+    background: white;
+    font-size: 15px;
+}
+
+.where-my-train-card {
+    padding: 18px;
+    background: white;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.train-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #e8ecf1;
+}
+
+.train-number {
+    font-size: 14px;
+    font-weight: 700;
+    color: #4c5a70;
+    text-decoration: underline;
+}
+
+.train-card-header h3 {
+    margin: 3px 0 0;
+    font-size: 20px;
+}
+
+.journey-date-pill {
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: #eef3f8;
+    color: #163d67;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.train-timing-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 170px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    padding: 18px 0;
+}
+
+.timing-block span,
+.timing-block small,
+.duration-block span {
+    display: block;
+}
+
+.timing-block strong {
+    display: block;
+    font-size: 25px;
+}
+
+.timing-block span {
+    margin-top: 2px;
+    color: #687485;
+    font-size: 15px;
+}
+
+.timing-block small {
+    width: fit-content;
+    margin-top: 8px;
+    padding: 4px 7px;
+    border-radius: 5px;
+    background: #eaf2fc;
+    color: #33445b;
+    font-size: 11px;
+}
+
+.timing-right {
+    text-align: right;
+}
+
+.timing-right small {
+    margin-left: auto;
+}
+
+.duration-block {
+    text-align: center;
+}
+
+.duration-line {
+    color: #697486;
+    font-size: 14px;
+}
+
+.train-line-dot {
+    width: 100%;
+    height: 1px;
+    margin: 15px auto 0;
+    background: #cbd3de;
+}
+
+.train-card-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    align-items: stretch;
+    padding-top: 14px;
+    border-top: 1px solid #e8ecf1;
+}
+
+.fare-box,
+.availability-box {
+    padding: 14px;
+    border-radius: 8px;
+    background: #f5f7fa;
+}
+
+.fare-box span,
+.availability-box span {
+    display: block;
+    color: #697486;
+    font-size: 12px;
+}
+
+.fare-box strong,
+.availability-box strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 18px;
+}
+
+.train-card-bottom .button {
+    min-width: 150px;
+}
+
+@media (max-width: 850px) {
+    .search-form {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-form .swap-button {
+        align-self: center;
+    }
+
+    .train-filter-field,
+    .search-button {
+        width: 100%;
+    }
+
+    .train-timing-row {
+        grid-template-columns: 1fr;
+    }
+
+    .timing-right,
+    .timing-right small {
+        text-align: left;
+        margin-left: 0;
+    }
+
+    .duration-block {
+        text-align: left;
+    }
+
+    .duration-block .train-line-dot {
+        margin-left: 0;
+    }
+
+    .train-card-bottom {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .train-card-bottom .button {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .results-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sort-box {
+        width: 100%;
+    }
+
+    .date-strip {
+        grid-template-columns: repeat(7, 68px);
+        justify-content: start;
+    }
+
+    .train-card-header {
+        flex-direction: column;
+    }
+
+    .journey-date-pill {
+        align-self: flex-start;
+    }
+
+    .train-card-bottom {
+        grid-template-columns: 1fr;
+    }
+
+    .fare-box,
+    .availability-box {
+        width: 100%;
+    }
+}
+
+
+/* ---------------- CANCELLATION ---------------- */
+
+.cancel-button {
+    background: #b42318;
+    color: white;
+    border: none;
+}
+
+.cancel-button:hover {
+    opacity: 0.9;
+}
+
+.cancelled-mark {
+    background: #b42318;
+}
+
+/* Space between View Booking and Cancel Booking */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.button-group form {
+    margin: 0;
+    padding: 0;
+}
+
+@media (max-width: 700px) {
+
+    .button-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .button-group form {
+        width: 100%;
+    }
+
+    .button-group .button,
+    .button-group form .button {
+        width: 100%;
+    }
+}
