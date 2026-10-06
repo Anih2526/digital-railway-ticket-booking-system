@@ -12,7 +12,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Trains</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user.css">
-    <script src="${pageContext.request.contextPath}/js/search.js?v=6" defer></script>
+    <script>
+        window.APP_CONTEXT_PATH = "${pageContext.request.contextPath}";
+    </script>
+
+    <script src="${pageContext.request.contextPath}/js/search.js?v=7" defer></script>
 </head>
 <body>
 
