@@ -1,5 +1,4 @@
-const contextPath =
-    "/" + window.location.pathname.split("/")[1];
+const contextPath = window.APP_CONTEXT_PATH || "";
 
 const seatPage = document.getElementById("seatPage");
 const scheduleId = seatPage.dataset.scheduleId;
