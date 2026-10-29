@@ -1,3 +1,4 @@
+
 package com.railway.dao;
 
 import com.railway.db.Database;
@@ -6,13 +7,35 @@ import com.railway.model.Schedule;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
 
 public class ScheduleDao {
 
+    /*
+     * Automatically mark expired scheduled journeys as completed.
+     */
+    public void updateExpiredSchedules() throws Exception {
+
+        String sql = """
+                UPDATE schedules
+                SET status = 'COMPLETED'
+                WHERE status = 'SCHEDULED'
+                  AND arrival_time <= NOW()
+                """;
+
+        try (Connection connection = Database.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
+
+            statement.executeUpdate();
+        }
+    }
+
     public List<Schedule> getAllSchedules() throws Exception {
+
+        updateExpiredSchedules();
 
         List<Schedule> schedules = new ArrayList<>();
 
@@ -35,7 +58,8 @@ public class ScheduleDao {
                 """;
 
         try (Connection connection = Database.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
+             PreparedStatement statement =
+                     connection.prepareStatement(sql);
              ResultSet result = statement.executeQuery()) {
 
             while (result.next()) {
@@ -47,6 +71,8 @@ public class ScheduleDao {
     }
 
     public Schedule getSchedule(int scheduleId) throws Exception {
+
+        updateExpiredSchedules();
 
         String sql = """
                 SELECT
@@ -67,7 +93,8 @@ public class ScheduleDao {
                 """;
 
         try (Connection connection = Database.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
 
             statement.setInt(1, scheduleId);
 
@@ -83,10 +110,12 @@ public class ScheduleDao {
 
     public double getFare(int scheduleId) throws Exception {
 
-        String sql = "SELECT fare FROM schedules WHERE schedule_id = ?";
+        String sql =
+                "SELECT fare FROM schedules WHERE schedule_id = ?";
 
         try (Connection connection = Database.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
 
             statement.setInt(1, scheduleId);
 
@@ -109,7 +138,14 @@ public class ScheduleDao {
 
         validateTimesAndFare(departureTime, arrivalTime, fare);
 
+        if (!departureTime.isAfter(LocalDateTime.now())) {
+            throw new Exception(
+                    "Departure time must be in the future."
+            );
+        }
+
         try (Connection connection = Database.getConnection()) {
+
             connection.setAutoCommit(false);
 
             try {
@@ -133,12 +169,16 @@ public class ScheduleDao {
                     statement.setObject(3, departureTime);
                     statement.setObject(4, arrivalTime);
                     statement.setDouble(5, fare);
+
                     statement.executeUpdate();
 
                     try (ResultSet result = statement.getGeneratedKeys()) {
                         if (!result.next()) {
-                            throw new Exception("Schedule ID was not generated.");
+                            throw new Exception(
+                                    "Schedule ID was not generated."
+                            );
                         }
+
                         scheduleId = result.getInt(1);
                     }
                 }
@@ -157,6 +197,7 @@ public class ScheduleDao {
 
                 try (PreparedStatement statement =
                              connection.prepareStatement(seatSql)) {
+
                     statement.setInt(1, scheduleId);
                     statement.setInt(2, trainId);
                     statement.executeUpdate();
@@ -182,11 +223,18 @@ public class ScheduleDao {
 
         validateTimesAndFare(departureTime, arrivalTime, fare);
 
-        if (!isValidStatus(status)) {
-            throw new Exception("Invalid schedule status.");
+        /*
+         * Admins may not change status manually through the edit form.
+         * Only SCHEDULED journeys can be edited.
+         */
+        if (!"SCHEDULED".equals(status)) {
+            throw new Exception(
+                    "Only scheduled journeys can be edited."
+            );
         }
 
         try (Connection connection = Database.getConnection()) {
+
             connection.setAutoCommit(false);
 
             try {
@@ -195,11 +243,13 @@ public class ScheduleDao {
                 int bookedSeats;
 
                 String checkSql = """
-                        SELECT train_id,
-                               (SELECT COUNT(*)
-                                FROM schedule_seats ss
-                                WHERE ss.schedule_id = s.schedule_id
-                                  AND ss.status = 'BOOKED') AS booked_count
+                        SELECT
+                            train_id,
+                            status,
+                            (SELECT COUNT(*)
+                             FROM schedule_seats ss
+                             WHERE ss.schedule_id = s.schedule_id
+                               AND ss.status = 'BOOKED') AS booked_count
                         FROM schedules s
                         WHERE schedule_id = ?
                         FOR UPDATE
@@ -211,9 +261,22 @@ public class ScheduleDao {
                     check.setInt(1, scheduleId);
 
                     try (ResultSet result = check.executeQuery()) {
+
                         if (!result.next()) {
-                            throw new Exception("Schedule was not found.");
+                            throw new Exception(
+                                    "Schedule was not found."
+                            );
                         }
+
+                        String currentStatus =
+                                result.getString("status");
+
+                        if (!"SCHEDULED".equals(currentStatus)) {
+                            throw new Exception(
+                                    "Completed or cancelled journeys cannot be edited."
+                            );
+                        }
+
                         oldTrainId = result.getInt("train_id");
                         bookedSeats = result.getInt("booked_count");
                     }
@@ -231,9 +294,9 @@ public class ScheduleDao {
                             route_id = ?,
                             departure_time = ?,
                             arrival_time = ?,
-                            fare = ?,
-                            status = ?
+                            fare = ?
                         WHERE schedule_id = ?
+                          AND status = 'SCHEDULED'
                         """;
 
                 try (PreparedStatement statement =
@@ -244,17 +307,21 @@ public class ScheduleDao {
                     statement.setObject(3, departureTime);
                     statement.setObject(4, arrivalTime);
                     statement.setDouble(5, fare);
-                    statement.setString(6, status);
-                    statement.setInt(7, scheduleId);
-                    statement.executeUpdate();
+                    statement.setInt(6, scheduleId);
+
+                    if (statement.executeUpdate() != 1) {
+                        throw new Exception(
+                                "The schedule is no longer editable."
+                        );
+                    }
                 }
 
                 if (oldTrainId != trainId) {
 
                     try (PreparedStatement delete =
                                  connection.prepareStatement(
-                                         "DELETE FROM schedule_seats WHERE schedule_id = ?"
-                                 )) {
+                                         "DELETE FROM schedule_seats WHERE schedule_id = ?")) {
+
                         delete.setInt(1, scheduleId);
                         delete.executeUpdate();
                     }
@@ -270,6 +337,7 @@ public class ScheduleDao {
 
                     try (PreparedStatement seatStatement =
                                  connection.prepareStatement(seatSql)) {
+
                         seatStatement.setInt(1, scheduleId);
                         seatStatement.setInt(2, trainId);
                         seatStatement.executeUpdate();
@@ -293,18 +361,49 @@ public class ScheduleDao {
             throw new Exception("Invalid schedule status.");
         }
 
-        String sql = "UPDATE schedules SET status = ? WHERE schedule_id = ?";
+        /*
+         * Prevent manual status changes on completed journeys.
+         * A scheduled journey may be cancelled manually.
+         */
+        String sql;
+
+        if ("CANCELLED".equals(status)) {
+            sql = """
+                    UPDATE schedules
+                    SET status = 'CANCELLED'
+                    WHERE schedule_id = ?
+                      AND status = 'SCHEDULED'
+                    """;
+        } else if ("COMPLETED".equals(status)) {
+            sql = """
+                    UPDATE schedules
+                    SET status = 'COMPLETED'
+                    WHERE schedule_id = ?
+                      AND status = 'SCHEDULED'
+                      AND arrival_time <= NOW()
+                    """;
+        } else {
+            throw new Exception(
+                    "Schedules cannot be changed back to SCHEDULED."
+            );
+        }
 
         try (Connection connection = Database.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
 
-            statement.setString(1, status);
-            statement.setInt(2, scheduleId);
-            statement.executeUpdate();
+            statement.setInt(1, scheduleId);
+
+            if (statement.executeUpdate() != 1) {
+                throw new Exception(
+                        "The schedule status cannot be changed."
+                );
+            }
         }
     }
 
     private Schedule readSchedule(ResultSet result) throws Exception {
+
         return new Schedule(
                 result.getInt("schedule_id"),
                 result.getInt("train_id"),
@@ -312,8 +411,14 @@ public class ScheduleDao {
                 result.getString("train_number"),
                 result.getString("train_name"),
                 result.getString("route_name"),
-                result.getObject("departure_time", LocalDateTime.class),
-                result.getObject("arrival_time", LocalDateTime.class),
+                result.getObject(
+                        "departure_time",
+                        LocalDateTime.class
+                ),
+                result.getObject(
+                        "arrival_time",
+                        LocalDateTime.class
+                ),
                 result.getDouble("fare"),
                 result.getString("status")
         );
@@ -325,11 +430,15 @@ public class ScheduleDao {
             double fare) throws Exception {
 
         if (departureTime == null || arrivalTime == null) {
-            throw new Exception("Departure and arrival times are required.");
+            throw new Exception(
+                    "Departure and arrival times are required."
+            );
         }
 
         if (!arrivalTime.isAfter(departureTime)) {
-            throw new Exception("Arrival time must be after departure time.");
+            throw new Exception(
+                    "Arrival time must be after departure time."
+            );
         }
 
         if (fare < 0) {

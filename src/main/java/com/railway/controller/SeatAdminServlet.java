@@ -3,9 +3,6 @@ package com.railway.controller;
 import com.railway.dao.LogDao;
 import com.railway.dao.SeatDao;
 import com.railway.dao.TrainDao;
-import com.railway.model.Coach;
-import com.railway.model.CoachSeat;
-import com.railway.model.Train;
 import com.railway.util.AuthUtil;
 
 import jakarta.servlet.ServletException;
@@ -15,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/admin/seats")
 public class SeatAdminServlet extends HttpServlet {

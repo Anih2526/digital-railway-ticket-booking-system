@@ -1,8 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="com.railway.model.AdminSummary" %>
 <%
-    AdminSummary summary =
-            (AdminSummary) request.getAttribute("summary");
 
     if (session.getAttribute("userId") == null
             || !"ADMIN".equals(session.getAttribute("role"))) {
@@ -38,43 +36,6 @@
 
         <% if (request.getAttribute("error") != null) { %>
             <div class="error-message"><%= request.getAttribute("error") %></div>
-        <% } %>
-
-        <% if (summary != null) { %>
-            <div class="stat-grid">
-                <div class="stat-card">
-                    <span>Total Bookings</span>
-                    <strong><%= summary.getTotalBookings() %></strong>
-                </div>
-                <div class="stat-card">
-                    <span>Confirmed</span>
-                    <strong><%= summary.getConfirmedBookings() %></strong>
-                </div>
-                <div class="stat-card">
-                    <span>Users</span>
-                    <strong><%= summary.getTotalUsers() %></strong>
-                </div>
-                <div class="stat-card">
-                    <span>Trains</span>
-                    <strong><%= summary.getTotalTrains() %></strong>
-                </div>
-                <div class="stat-card">
-                    <span>Stations</span>
-                    <strong><%= summary.getTotalStations() %></strong>
-                </div>
-                <div class="stat-card">
-                    <span>Routes</span>
-                    <strong><%= summary.getTotalRoutes() %></strong>
-                </div>
-                <div class="stat-card">
-                    <span>Revenue</span>
-                    <strong>₹<%= String.format("%.2f", summary.getTotalRevenue()) %></strong>
-                </div>
-                <div class="stat-card">
-                    <span>Available Seats</span>
-                    <strong><%= summary.getAvailableSeats() %></strong>
-                </div>
-            </div>
         <% } %>
 
         <div class="admin-menu-grid">
